@@ -44,12 +44,14 @@ countFiles(
       headers: { 'Content-Type': 'application/json' },
     })
       .then((res) => {
-        console.log('✅ Check passed!');
+        if (res.status === 200) console.log('✅ Check passed!');
+        else
+          res.json().then((json) => {
+            console.log('⚠️ Could not add check');
+            console.log(json.message);
+            process.exit(1);
+          });
       })
-      .catch((error) => {
-        console.log('⚠️ Could not add check');
-        console.log(error);
-        process.exit(1);
-      });
+      .catch((error) => console.log(error));
   }
 );
