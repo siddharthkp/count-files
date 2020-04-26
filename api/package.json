@@ -3,12 +3,12 @@
   "private": true,
   "version": "0.0.0",
   "scripts": {
-    "start": "micro api.js"
+    "build": "echo nothing"
   },
   "author": "siddharthkp",
   "dependencies": {
     "@octokit/auth-app": "^2.4.5",
-    "@octokit/rest": "^17.6.0",
-    "micro": "^9.3.4"
-  }
+    "@octokit/rest": "^17.6.0"
+  },
+  "devDependencies": {}
 }

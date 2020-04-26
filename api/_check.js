@@ -1,15 +1,15 @@
-const fs = require('fs');
+let privateKey = process.env.PRIVATE_KEY;
+
 const { Octokit } = require('@octokit/rest');
 const { createAppAuth } = require('@octokit/auth-app');
 
 // application level constants
 const appId = 62324;
-const privateKey = fs.readFileSync('private.key', 'utf8');
 const name = 'Check count';
 
 const app = new Octokit({
   authStrategy: createAppAuth,
-  auth: { id: appId, privateKey: privateKey },
+  auth: { id: appId, privateKey: privateKey.replace(/\\n/g, '\n') },
 });
 
 const run = async ({

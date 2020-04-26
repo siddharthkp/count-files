@@ -16,8 +16,8 @@ if (!ci) {
   process.exit(1);
 }
 
-let API = 'https://check-files-check.now.sh';
-if (ci === 'custom') API = 'http://localhost:3000';
+let API = 'https://count-files-check.sid.now.sh/';
+// if (ci === 'custom') API = 'http://localhost:3000';
 
 countFiles('.', { ignore: (file) => file.includes('node_modules/') }, function (
   err,
@@ -27,7 +27,8 @@ countFiles('.', { ignore: (file) => file.includes('node_modules/') }, function (
     repo,
     sha,
     title: `${results.files}`, // needs to be a string
-    summary: `There are ${results.files} files in this repository`,
+    summary: `There are ${results.files} files in this repo`,
+    text: JSON.stringify(results, null, 2),
   };
 
   fetch(API, {
