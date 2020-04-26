@@ -31,12 +31,19 @@ countFiles('.', { ignore: (file) => file.includes('node_modules/') }, function (
     text: JSON.stringify(results, null, 2),
   };
 
+  console.log('#️⃣', body.summary);
+
   fetch(API, {
     method: 'post',
     body: JSON.stringify(body),
     headers: { 'Content-Type': 'application/json' },
   })
-    .then((res) => res.json())
-    .then((json) => console.log(json))
-    .catch((error) => console.log(error));
+    .then((res) => {
+      console.log('✅ Check passed!');
+    })
+    .catch((error) => {
+      console.log('⚠️ Could not add check');
+      console.log(error);
+      process.exit(1);
+    });
 });
