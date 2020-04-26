@@ -8,10 +8,16 @@ module.exports = async (req, res) => {
   }
 
   try {
-    await check(data);
-    res.json({ message: 'done' });
+    const { status, message } = await check(data);
+    res.status(status).json({ message });
   } catch (error) {
     console.log(error);
-    res.status(500).json({ message: 'error' });
+    res.status(500).json({
+      message: `
+        Something broke pretty bad!
+
+        Please create an issue with this error message: ${error}
+    `,
+    });
   }
 };

@@ -13,9 +13,14 @@ const app = new Octokit({
 });
 
 const getInstallation = async ({ owner, repo }) => {
-  const { data } = await app.apps.getRepoInstallation({ owner, repo });
-  const installationId = data.id;
-  return installationId;
+  try {
+    const { data } = await app.apps.getRepoInstallation({ owner, repo });
+    const installationId = data.id;
+    return { data: installationId };
+  } catch (error) {
+    console.log(error);
+    return { error };
+  }
 };
 
 const getToken = async ({ installationId }) => {
@@ -52,16 +57,32 @@ const run = async ({
   console.log('1/4 output', JSON.stringify(output));
 
   // get installation id for repo
-  const installationId = await getInstallation({ owner, repo });
+  const { data, error } = await getInstallation({ owner, repo });
+  if (error) {
+    return {
+      status: 404,
+      message: `${name} is not installed on this repository. Please configure the application with this link: https://github.com/apps/count-files`,
+    };
+  }
+
+  const { installationId } = data;
   console.log('2/4 installationId', installationId);
 
   // get auth token
   const token = await getToken({ installationId });
   console.log('3/4 token', token);
 
+  if (!installationId)
+    return {
+      status: 404,
+      message: `${name} is not installed on this repository. Please configure the application with this link: https://github.com/apps/count-files`,
+    };
+
   // create check
   await createCheck({ token, name, owner, repo, sha, output });
   console.log('4/4 end of request \n\n');
+
+  return { message: 'Added check' };
 };
 
 module.exports = run;
