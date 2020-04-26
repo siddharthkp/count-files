@@ -17,7 +17,7 @@ if (!ci) {
 }
 
 let API = 'https://count-files-check.sid.now.sh/';
-// if (ci === 'custom') API = 'http://localhost:3000';
+if (ci === 'custom') API = 'http://localhost:3000';
 
 countFiles('.', { ignore: (file) => file.includes('node_modules/') }, function (
   err,
