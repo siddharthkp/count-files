@@ -19,31 +19,37 @@ if (!ci) {
 let API = 'https://count-files-check.sid.now.sh/';
 if (ci === 'custom') API = 'http://localhost:3000';
 
-countFiles('.', { ignore: (file) => file.includes('node_modules/') }, function (
-  err,
-  results
-) {
-  const body = {
-    repo,
-    sha,
-    title: `${results.files}`, // needs to be a string
-    summary: `There are ${results.files} files in this repo`,
-    text: JSON.stringify(results, null, 2),
-  };
+countFiles(
+  '.',
+  {
+    ignore: (file) => {
+      // ignore node_modules and .files/.directories
+      return file.includes('node_modules/') || file.includes('/.');
+    },
+  },
+  function (err, results) {
+    const body = {
+      repo,
+      sha,
+      title: `${results.files}`, // needs to be a string
+      summary: `There are ${results.files} files in this repo`,
+      text: JSON.stringify(results, null, 2),
+    };
 
-  console.log('#️⃣', body.summary);
+    console.log('#️⃣ ', body.summary);
 
-  fetch(API, {
-    method: 'post',
-    body: JSON.stringify(body),
-    headers: { 'Content-Type': 'application/json' },
-  })
-    .then((res) => {
-      console.log('✅ Check passed!');
+    fetch(API, {
+      method: 'post',
+      body: JSON.stringify(body),
+      headers: { 'Content-Type': 'application/json' },
     })
-    .catch((error) => {
-      console.log('⚠️ Could not add check');
-      console.log(error);
-      process.exit(1);
-    });
-});
+      .then((res) => {
+        console.log('✅ Check passed!');
+      })
+      .catch((error) => {
+        console.log('⚠️ Could not add check');
+        console.log(error);
+        process.exit(1);
+      });
+  }
+);
