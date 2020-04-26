@@ -2,10 +2,10 @@
   "name": "count-files-check",
   "version": "0.0.2",
   "description": "",
-  "bin": "cli.js",
+  "bin": "index.js",
   "scripts": {
-    "start": "cli.js",
-    "test": "CI=fake CI_REPO_OWNER=siddharthkp CI_REPO_NAME=test-repo CI_COMMIT_SHA=200756d8241e564784c4ca5ddd6f1df65c4754fe node cli.js"
+    "start": "index.js",
+    "test": "CI=custom CI_REPO_OWNER=siddharthkp CI_REPO_NAME=test-repo CI_COMMIT_SHA=200756d8241e564784c4ca5ddd6f1df65c4754fe node index.js"
   },
   "keywords": [],
   "author": "siddharthkp",

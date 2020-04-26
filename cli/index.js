@@ -17,9 +17,12 @@ if (!ci) {
 }
 
 let API = 'https://check-files-check.now.sh';
-if (ci === 'fake') API = 'http://localhost:3000';
+if (ci === 'custom') API = 'http://localhost:3000';
 
-countFiles('.', function (err, results) {
+countFiles('.', { ignore: (file) => file.includes('node_modules/') }, function (
+  err,
+  results
+) {
   const body = {
     repo,
     sha,
@@ -33,5 +36,6 @@ countFiles('.', function (err, results) {
     headers: { 'Content-Type': 'application/json' },
   })
     .then((res) => res.json())
-    .then((json) => console.log(json));
+    .then((json) => console.log(json))
+    .catch((error) => console.log(error));
 });
