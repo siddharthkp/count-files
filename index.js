@@ -1,16 +1,10 @@
 #!/usr/bin/env node
-const { exec } = require('child_process');
+const countFiles = require('count-files');
+const check = require('./check');
 
-exec('git ls-files', (error, stdout, stderr) => {
-  if (error) {
-    console.log(`error: ${error.message}`);
-    return;
-  }
-  if (stderr) {
-    console.log(`stderr: ${stderr}`);
-    return;
-  }
-
-  const count = stdout.split('\n').length;
-  console.log(count);
+countFiles('.', function (err, results) {
+  check({
+    title: results.files,
+    summary: `There are ${results.files} files in this repository`,
+  });
 });
