@@ -16,7 +16,7 @@ const getInstallation = async ({ owner, repo }) => {
   try {
     const { data } = await app.apps.getRepoInstallation({ owner, repo });
     const installationId = data.id;
-    return { data: installationId };
+    return { data: { installationId } };
   } catch (error) {
     console.log(error);
     return { error };
@@ -72,17 +72,11 @@ const run = async ({
   const token = await getToken({ installationId });
   console.log('3/4 token', token);
 
-  if (!installationId)
-    return {
-      status: 404,
-      message: `${name} is not installed on this repository. Please configure the application with this link: https://github.com/apps/count-files`,
-    };
-
   // create check
   await createCheck({ token, name, owner, repo, sha, output });
   console.log('4/4 end of request \n\n');
 
-  return { message: 'Added check' };
+  return { status: 200, message: 'Added check' };
 };
 
 module.exports = run;
