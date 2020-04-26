@@ -12,6 +12,30 @@ const app = new Octokit({
   auth: { id: appId, privateKey: privateKey.replace(/\\n/g, '\n') },
 });
 
+const getInstallation = async ({ owner, repo }) => {
+  const { data } = await app.apps.getRepoInstallation({ owner, repo });
+  const installationId = data.id;
+  return installationId;
+};
+
+const getToken = async ({ installationId }) => {
+  const { token } = await app.auth({ type: 'installation', installationId });
+  return token;
+};
+
+const createCheck = async ({ token, name, owner, repo, sha, output }) => {
+  const octokit = new Octokit({ auth: token });
+
+  await octokit.checks.create({
+    name,
+    owner,
+    repo,
+    head_sha: sha,
+    conclusion: 'success',
+    output,
+  });
+};
+
 const run = async ({
   repo: repositoryPath,
   sha,
@@ -21,35 +45,23 @@ const run = async ({
 }) => {
   const owner = repositoryPath.split('/')[0];
   const repo = repositoryPath.split('/')[1];
-  console.log('repo', repositoryPath);
+  console.log('1/4 repo', repositoryPath);
+
+  // check output
+  const output = { title, summary, text };
+  console.log('1/4 output', JSON.stringify(output));
 
   // get installation id for repo
-  const { data } = await app.apps.getRepoInstallation({ owner, repo });
-  const installationId = data.id;
-  console.log('installation', installationId);
+  const installationId = await getInstallation({ owner, repo });
+  console.log('2/4 installationId', installationId);
 
-  // get token
-  const { token } = await app.auth({ type: 'installation', installationId });
-  console.log('token', token);
+  // get auth token
+  const token = await getToken({ installationId });
+  console.log('3/4 token', token);
 
-  // authenticate
-  const octokit = new Octokit({ auth: token });
-  console.log('output', JSON.stringify({ title, summary, text }));
-
-  await octokit.checks.create({
-    owner,
-    repo,
-    head_sha: sha,
-    conclusion: 'success',
-    name,
-    output: {
-      title,
-      summary,
-      text,
-    },
-  });
-
-  console.log('end of request \n\n');
+  // create check
+  await createCheck({ token, name, owner, repo, sha, output });
+  console.log('4/4 end of request \n\n');
 };
 
 module.exports = run;

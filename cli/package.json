@@ -5,7 +5,7 @@
   "bin": "index.js",
   "scripts": {
     "start": "index.js",
-    "test": "CI=custom CI_REPO_OWNER=siddharthkp CI_REPO_NAME=test-repo CI_COMMIT_SHA=6e2688ba94aaa8282e954d41be8f8c275d38e74d node index.js"
+    "test": "CI=custom CI_REPO_OWNER=siddharthkp CI_REPO_NAME=test-repo CI_COMMIT_SHA=fbb56df28d108d7b80f788889651e2118772eabf node index.js"
   },
   "keywords": [],
   "author": "siddharthkp",
