@@ -1,14 +1,12 @@
 {
   "name": "count-files-check-api",
-  "version": "0.0.1",
-  "description": "",
+  "private": true,
+  "version": "0.0.0",
   "scripts": {
     "start": "micro api.js",
     "dev:api": "CI=fake CI_REPO_OWNER=siddharthkp CI_REPO_NAME=test-repo CI_COMMIT_SHA=200756d8241e564784c4ca5ddd6f1df65c4754fe micro api.js"
   },
-  "keywords": [],
   "author": "siddharthkp",
-  "license": "MIT",
   "dependencies": {
     "@octokit/auth-app": "^2.4.5",
     "@octokit/rest": "^17.6.0",
