@@ -2,23 +2,6 @@ const fs = require('fs');
 const { Octokit } = require('@octokit/rest');
 const { createAppAuth } = require('@octokit/auth-app');
 
-// get repository from CI environment
-const { ci, repo: repositoryPath, sha } = require('ci-env');
-
-if (!ci) {
-  console.log(`
-  This is not running in a CI environment. 
-
-  If you are running this on local, please fake the required environment variables
-
-  Reference: https://github.com/siddharthkp/ci-env/blob/master/index.js#L121-L131
-  `);
-  process.exit(1);
-}
-
-const owner = repositoryPath.split('/')[0];
-const repo = repositoryPath.split('/')[1];
-
 // application level constants
 const appId = 62324;
 const privateKey = fs.readFileSync('private.key', 'utf8');
@@ -29,7 +12,16 @@ const app = new Octokit({
   auth: { id: appId, privateKey: privateKey },
 });
 
-const run = async ({ title = '', summary = '', text = '' }) => {
+const run = async ({
+  repo: repositoryPath,
+  sha,
+  title = '',
+  summary = '',
+  text = '',
+}) => {
+  const owner = repositoryPath.split('/')[0];
+  const repo = repositoryPath.split('/')[1];
+
   // get installation id for repo
   const { data } = await app.apps.getRepoInstallation({ owner, repo });
   const installationId = data.id;

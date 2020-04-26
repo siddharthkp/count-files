@@ -3,14 +3,12 @@
   "private": true,
   "version": "0.0.0",
   "scripts": {
-    "start": "micro api.js",
-    "dev:api": "CI=fake CI_REPO_OWNER=siddharthkp CI_REPO_NAME=test-repo CI_COMMIT_SHA=200756d8241e564784c4ca5ddd6f1df65c4754fe micro api.js"
+    "start": "micro api.js"
   },
   "author": "siddharthkp",
   "dependencies": {
     "@octokit/auth-app": "^2.4.5",
     "@octokit/rest": "^17.6.0",
-    "ci-env": "^1.12.0",
     "micro": "^9.3.4"
   }
 }
