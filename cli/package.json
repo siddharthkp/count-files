@@ -13,6 +13,6 @@
   "dependencies": {
     "ci-env": "^1.12.0",
     "count-files": "^2.6.2",
-    "node-fetch": "^2.6.0"
+    "node-fetch": "^3.1.1"
   }
 }
